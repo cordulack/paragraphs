@@ -1,0 +1,106 @@
+@import url('https://fonts.googleapis.com/css?family=Lato|Montserrat&display=swap');
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Montserrat', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: #fff;
+}
+
+.text-generator {
+  display: flex;
+}
+
+.menu {
+  margin: 1em;
+  font-family: 'Lato', sans-serif;
+  background-color: #fff;
+  line-height: 1.2em;
+  font-size: 16px;
+  color: #212121;
+}
+
+.menu-item {
+  width: 250px;
+  margin-top: .7em;
+}
+
+.generated-text {
+  font-size: 14px;
+  line-height: 1.3em;
+  margin: 0 auto 0 auto;
+  min-height: 300px;
+  padding-left: 1em;
+  padding-right: 1em;
+  color: #212121;
+}
+
+.u-bg-image-none {
+  background-image: none;
+}
+
+input {
+  border: none;
+  font-family: 'Lato', sans-serif;
+  border-radius: 15px;
+  background-color: #fff;
+  font-size: 1rem;
+  margin-left: 10px;
+  width: 50px;
+  padding-left: 5px;
+  cursor: pointer;
+}
+
+.icon-done {
+  color: rgba(255, 255, 255, 1);
+  visibility: visible;
+  opacity: 1;
+  transition: visibility 0s, opacity 0.5s linear;
+}
+
+.copy-button {
+  vertical-align: top;
+  height: 2em;
+  width: 60px;
+}
+
+.copy-button-text {
+  width: 40px;
+  position: absolute;
+  top: .4em;
+  left: 50%;
+  margin-left: -20px;
+  visibility: visible;
+  opacity: 1;
+  transition: visibility 0s, opacity 0.5s ease-in;
+}
+
+.hide {
+  visibility: hidden;
+  opacity: 0;
+}
+
+button {
+  position: relative;
+  background-color: #0062d4;
+  border-radius: 5px;
+  font-size: 16px;
+  font-weight: 600;
+  height: 2em;
+  color: #fff;
+  padding: 0 10px 0 10px;
+  margin: .5em .5em .5em 0;
+  border: none;
+  cursor: pointer;
+  transition: background-color .2s ease-in;
+}
+
+button:hover {
+  background-color: #0a7cff;
+}
+
+label {
+  cursor: pointer;
+}
