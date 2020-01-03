@@ -1,5 +1,8 @@
 # Paragraph Generator
 
+Generate some dummy text by specifying the number of paragraphs you want, the minimum word count in each paragraph, 
+and if you want to display the paragraph number and word count.
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
