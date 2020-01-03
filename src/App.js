@@ -1,41 +1,32 @@
-import React, { Component } from 'react';
+import React, { useState, useEffect } from 'react';
 
 import { baseText } from './baseText.js';
 
-class TextGenerator extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      numberOfParagraphs: 25,
-      minWordCount : 20,
-      showParagraphNumbers: false,
-      showWordCount : false,
-      generatedText: [],
-    };
+function TextGenerator() {
+  const [numberOfParagraphs, setNumberOfParagraphs] = useState(25);
+  const [minWordCount, setMinWordCount] = useState(20);
+  const [showParagraphNumbers, setShowParagraphNumbers] = useState(false);
+  const [showWordCount, setShowWordCount] = useState(false);
+  const [generatedText, setGeneratedText] = useState([]);
 
-    this.generateText = this.generateText.bind(this);
-    this.handleNumOfParagraphChange = this.handleNumOfParagraphChange.bind(this);
-    this.handleMinWordCountChange = this.handleMinWordCountChange.bind(this);
-    this.handleAddParagraphNumberChange = this.handleAddParagraphNumberChange.bind(this);
-    this.handleAddWordCountChange = this.handleAddWordCountChange.bind(this);
-    this.handleCopyButtonClick = this.handleCopyButtonClick.bind(this);
-    this.handleKeyDown = this.handleKeyDown.bind(this);
+  useEffect(()=> {
+    generateText();
+  }, []);
+
+  useEffect(()=> {
+    document.addEventListener("keydown", e => {
+      if(e.key === 'Enter'){
+        generateText();
+      }
+    }, false);
+  }, []);
+
+  function generateText() {
+    const paragraphs = generateParagraphs(baseText, numberOfParagraphs);
+    setGeneratedText(paragraphs);
   }
 
-  componentDidMount() {
-    document.addEventListener("keydown", this.handleKeyDown, false);
-    this.generateText();
-  }
-
-  generateText() {
-    const baseText = this.getBaseText();
-    const paragraphs = this.generateParagraphs(baseText, this.state.numberOfParagraphs);
-    this.setState({
-      generatedText: paragraphs
-    });
-  }
-
-  generateParagraphs( baseText, numberOfParagraphs){
+  function generateParagraphs( baseText, numberOfParagraphs){
     // Split the base text into an array at each blank line
     const paragraphs = baseText.split('\n\n');
     const totalParagraphNumber = paragraphs.length;
@@ -54,12 +45,12 @@ class TextGenerator extends Component {
         continue;
       }
       const wordCount = paragraphs[i].split(" ").length;
-      if(wordCount < this.state.minWordCount) {
+      if(wordCount < minWordCount) {
         continue;
       }
 
-      const formattedWordCount = this.state.showWordCount ? `(${wordCount})` : '';
-      const paragraphNumber = this.state.showParagraphNumbers ? `${currentParagraphNumber} - ` : '';
+      const formattedWordCount = showWordCount ? `(${wordCount})` : '';
+      const paragraphNumber = showParagraphNumbers ? `${currentParagraphNumber} - ` : '';
 
       formattedParagraphs.push(`${paragraphNumber} ${paragraphs[i]} ${formattedWordCount}`);
       currentParagraphNumber++;
@@ -68,31 +59,7 @@ class TextGenerator extends Component {
     return formattedParagraphs;
   }
 
-  handleNumOfParagraphChange(event) {
-    this.setState({
-      numberOfParagraphs: event.target.value
-    });
-  }
-
-  handleAddParagraphNumberChange(event) {
-    this.setState({
-      showParagraphNumbers: event.target.checked
-    });
-  }
-
-  handleAddWordCountChange(event) {
-    this.setState({
-      showWordCount: event.target.checked
-    });
-  }
-
-  handleMinWordCountChange(event) {
-    this.setState({
-      minWordCount: event.target.value
-    });
-  }
-
-  handleCopyButtonClick() {
+  function handleCopyButtonClick() {
     const text = document.querySelector('.generated-text').innerText;
 
     const textArea = document.createElement("textarea");
@@ -101,27 +68,16 @@ class TextGenerator extends Component {
     textArea.select();
     document.execCommand('copy');
     textArea.parentNode.removeChild(textArea);
-    this.toggleCopyButtonText();
-    setTimeout(this.toggleCopyButtonText, 750);
+    toggleCopyButtonText();
+    setTimeout(toggleCopyButtonText, 750);
   }
 
-  toggleCopyButtonText() {
+  function toggleCopyButtonText() {
     document.querySelector('.copy-button-text').classList.toggle('hide');
     document.querySelector('.icon-done').classList.toggle('hide');
   }
 
-  handleKeyDown(event) {
-    if(event.key === 'Enter'){
-      this.generateText();
-    }
-  }
-
-  getBaseText() {
-    return baseText;
-  }
-
-  render(){
-    return(
+  return(
     <div className="text-generator">
       <div className="u-list-style-none menu">
       <div className="menu-item">
@@ -130,9 +86,8 @@ class TextGenerator extends Component {
         <input
           type="number"
           min={1}
-          value={this.state.numberOfParagraphs}
-          onChange={this.handleNumOfParagraphChange}
-          onKeyDown={this.handleKeyPress}
+          value={numberOfParagraphs}
+          onChange={ e => setNumberOfParagraphs(e.target.value)}
         />
       </label>
       </div>
@@ -141,39 +96,36 @@ class TextGenerator extends Component {
         <input
           type="number"
           min="0"
-          value={this.state.minWordCount}
-          onChange={this.handleMinWordCountChange}
+          value={minWordCount}
+          onChange={ e => setMinWordCount(e.target.value)}
         />
         </label>
       </div>
-      <div className="menu-item"><label>Paragraph Numbers<input type="checkbox" onChange={this.handleAddParagraphNumberChange}/></label></div>
-      <div className="menu-item"><label>Word Count<input type="checkbox" onChange={this.handleAddWordCountChange}/></label></div>
+      <div className="menu-item"><label>Paragraph Numbers<input type="checkbox" onChange={ e => setShowParagraphNumbers(e.target.checked)}/></label></div>
+      <div className="menu-item"><label>Word Count<input type="checkbox" onChange={ e => setShowWordCount(e.target.checked)}/></label></div>
       <div className="buttons">
-        <button onClick={this.generateText}>Refresh Paragraphs</button>
-        <button className="copy-button" onClick={this.handleCopyButtonClick}>
+        <button onClick={generateText}>Refresh Paragraphs</button>
+        <button className="copy-button" onClick={handleCopyButtonClick}>
           <svg className="icon-done hide" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="none" d="M0 0h24v24H0z"/><path fill="white" d="M9 16.2L4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4L9 16.2z"/></svg>
           <span className="copy-button-text">Copy</span>
         </button>
       </div>
     </div>
-      <div className={this.state.generatedText.length !== 0 ? "generated-text u-bg-image-none" :"generated-text"}>
-        {this.state.generatedText.map( (paragraph, i) => {
+      <div className={generatedText.length !== 0 ? "generated-text u-bg-image-none" :"generated-text"}>
+        {generatedText.map( (paragraph, i) => {
           return <p key={i}>{paragraph}</p>
         })}
       </div>
     </div>
     );
-  }
 }
 
-class App extends Component {
-  render() {
-    return (
-      <div className="App">
-        <TextGenerator className='text-generator'/>
-      </div>
-    );
-  }
+function App() {
+  return (
+    <div className="App">
+      <TextGenerator className='text-generator'/>
+    </div>
+  );
 }
 
 export default App;
