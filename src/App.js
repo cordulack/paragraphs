@@ -160,11 +160,7 @@ function App() {
   return (
     <Router>
       <div className="App">
-        <Link to="/">Paragraphs</Link> | <Link to="/about">About</Link>
         <Switch>
-          <Route path="/about">
-            <About />
-          </Route>
           <Route path="/">
             <TextGenerator className='text-generator'/>
           </Route>
@@ -176,14 +172,6 @@ function App() {
 
 function useQuery() {
   return new URLSearchParams(useLocation().search);
-}
-
-function About() {
-  return (
-    <div>
-      <h2>About</h2>
-    </div>
-  );
 }
 
 export default App;
