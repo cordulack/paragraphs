@@ -107,6 +107,7 @@ function TextGenerator() {
       <label>
         Number of Paragraphs
         <input
+          className="paragraph-number"
           type="number"
           min={1}
           value={numberOfParagraphs}
@@ -117,6 +118,7 @@ function TextGenerator() {
       <div className="menu-item">
         <label>Min. Words in Paragraph
         <input
+          className="minWordCount"
           type="number"
           min="0"
           value={minWordCount}
