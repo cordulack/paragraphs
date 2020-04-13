@@ -24,14 +24,6 @@ function TextGenerator() {
   // Get the current location.
   const location = history.location;
 
-  history.listen(() => {
-     const differentURLParams = getURLParamValues();
-     setNumberOfParagraphs(differentURLParams.numberOfParagraphs);
-     setMinWordCount(differentURLParams.minWordCount);
-     setShowParagraphNumbers(differentURLParams.showParagraphNumbers);
-     setShowWordCount(differentURLParams.showWordCount);
-  });
-
   useEffect(()=> {
     generateText();
   }, []);
