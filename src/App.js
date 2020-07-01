@@ -7,9 +7,6 @@ import {
   useHistory,
 } from "react-router-dom";
 
-// import { baseTextLorem } from './baseTextLorem.js';
-// import { baseTextVerne } from './baseTextVerne.js';
-
 function TextGenerator() {
   let query = useQuery();
   let history = useHistory();
