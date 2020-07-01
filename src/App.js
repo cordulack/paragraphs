@@ -7,14 +7,13 @@ import {
   useHistory,
 } from "react-router-dom";
 
-import { baseText } from './baseText.js';
-
 function TextGenerator() {
   let query = useQuery();
   let history = useHistory();
 
   const urlParams = getURLParamValues();
 
+  const [textType, setTextType] = useState(urlParams.textType);
   const [numberOfParagraphs, setNumberOfParagraphs] = useState(urlParams.numberOfParagraphs);
   const [minWordCount, setMinWordCount] = useState(urlParams.minWordCount);
   const [showParagraphNumbers, setShowParagraphNumbers] = useState(urlParams.showParagraphNumbers);
@@ -30,15 +29,25 @@ function TextGenerator() {
 
   function getURLParamValues() {
     return {
+      'textType': query.get('textType') === 'verne' ? 'verne' : 'lorem',
       'numberOfParagraphs': query.get('paragraphs') ? parseInt(query.get('paragraphs')) : 20,
       'minWordCount': query.get('words') ? parseInt(query.get('words')) : 20,
       'showParagraphNumbers' : query.get('pnumbers') === "1",
       'showWordCount': query.get('wordcount') === "1",
     };
   }
+
   function generateText() {
-    const paragraphs = generateParagraphs(baseText, numberOfParagraphs);
-    setGeneratedText(paragraphs);
+    const textChoice = textType === 'verne' ? 'Verne' : 'Lorem';
+
+    import('./text-files/baseText' + textChoice + '.js')
+      .then(({ baseText }) => {
+        const paragraphs = generateParagraphs(baseText, numberOfParagraphs);
+        setGeneratedText(paragraphs);
+      })
+      .catch(err => {
+        console.log(err);
+      });
   }
 
   function generateParagraphs( baseText, numberOfParagraphs){
@@ -97,12 +106,22 @@ function TextGenerator() {
     query.set('words', minWordCount);
     query.set('pnumbers', `${showParagraphNumbers ? '1': '0'}`);
     query.set('wordcount', `${showWordCount ? '1' : '0'}`);
+    query.set('textType', textType);
     window.history.replaceState({}, '', `${location.pathname}?${query}`);
   }
 
   return(
     <div className="text-generator">
       <div className="u-list-style-none menu">
+      <div className="menu-item">
+        <label>
+          Text
+        </label>
+        <select value={textType} onChange={ e => setTextType(e.target.value)}>
+          <option value="lorem">Lorem</option>
+          <option value="verne">Jules Verne, From the Earth to the Moon</option>
+        </select>
+      </div>
       <div className="menu-item">
       <label>
         Number of Paragraphs
